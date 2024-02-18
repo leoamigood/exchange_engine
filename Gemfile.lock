@@ -261,6 +261,7 @@ PLATFORMS
 DEPENDENCIES
   bootsnap
   capybara
+  connection_pool (~> 2.4, >= 2.4.1)
   debug
   eventmachine (~> 1.2, >= 1.2.7)
   exchange!

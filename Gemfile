@@ -68,5 +68,6 @@ end
 
 gem 'faye-websocket', '~> 0.11.3'
 gem 'eventmachine', '~> 1.2', '>= 1.2.7'
+gem 'connection_pool', '~> 2.4', '>= 2.4.1'
 
 gem 'exchange', path: 'engines/exchange'
