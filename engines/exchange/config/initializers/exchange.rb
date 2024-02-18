@@ -7,7 +7,7 @@ Thread.new do
 
     @ws.on :open do |event|
       Rails.logger.debug "Exchange server connection established."
-      Exchange::Service.get_quota(@ws)
+      Exchange::Service.update_quota(@ws)
     end
 
     @ws.on :message do |event|
@@ -27,6 +27,6 @@ EM.next_tick do
   end
 
   EM.add_periodic_timer(Exchange::Service::QUOTA_REFRESH) do
-    Exchange::Service.get_quota(@ws)
+    Exchange::Service.update_quota(@ws)
   end
 end

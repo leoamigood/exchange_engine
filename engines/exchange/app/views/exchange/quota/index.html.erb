@@ -1,1 +1,7 @@
-Quota: <%= @quota %> <a href="./quota">Click to refresh...</a>
+Quota: <%= @quota %> (<%= @status %>) <a href="http://localhost:3000/exchange/quota">Refresh...</a>
+
+<% if @status == 'active' %>
+  <%= link_to "Pause...", pause_quota_path() %>
+<% else %>
+  <%= link_to "Resume...", resume_quota_path() %>
+<% end %>
