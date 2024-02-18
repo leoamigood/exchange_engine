@@ -1,23 +1,17 @@
 require 'faye/websocket'
 require 'eventmachine'
 
-QUOTA_TTL = 7.seconds
-
 Thread.new do
   EM.run {
     @ws = Faye::WebSocket::Client.new('ws://ws.vi-server.org/mirror')
 
     @ws.on :open do |event|
-      p [:open]
-
-      puts "Connection established."
-      get_quota
+      Rails.logger.debug "Exchange server connection established."
+      Exchange::Service.get_quota(@ws)
     end
 
     @ws.on :message do |event|
-      p [:message]
-
-      save_quota(event, expires_in: 7)
+      Exchange::Service.save_quota(event, expires_in: Exchange::Service::QUOTA_TTL)
     end
 
     @ws.on :close do |event|
@@ -28,30 +22,11 @@ Thread.new do
 end
 
 EM.next_tick do
-  EM.add_periodic_timer(3) do
-    show_quota
+  EM.add_periodic_timer(5) do
+    Exchange::Service.trace
   end
 
-  EM.add_periodic_timer(16) do
-    get_quota
+  EM.add_periodic_timer(Exchange::Service::QUOTA_REFRESH) do
+    Exchange::Service.get_quota(@ws)
   end
-end
-
-def redis
-  @redis ||= ConnectionPool::Wrapper.new do
-    Redis.new(url: ENV.fetch("REDIS_URL") { "redis://localhost:6379" })
-  end
-end
-
-def get_quota
-  puts "Getting quota. Expires at #{Time.now + QUOTA_TTL}"
-  @ws.send(rand(100))
-end
-
-def save_quota(event, expires_in: QUOTA_TTL)
-  redis.set("exchange_quota", event.data, ex: expires_in)
-end
-
-def show_quota
-  puts "#{Time.now}: quota: #{redis.get('exchange_quota') || "Expired/Not available"}"
 end
