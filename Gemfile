@@ -66,4 +66,7 @@ group :test do
   gem "selenium-webdriver"
 end
 
+gem 'faye-websocket', '~> 0.11.3'
+gem 'eventmachine', '~> 1.2', '>= 1.2.7'
+
 gem 'exchange', path: 'engines/exchange'

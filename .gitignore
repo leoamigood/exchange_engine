@@ -16,11 +16,13 @@
 /tmp/*
 !/log/.keep
 !/tmp/.keep
+engines/exchange/test/dummy/log/*
 
 # Ignore pidfiles, but keep the directory.
 /tmp/pids/*
 !/tmp/pids/
 !/tmp/pids/.keep
+engines/exchange/test/dummy/tmp/*
 
 # Ignore storage (uploaded files in development and any SQLite databases).
 /storage/*
